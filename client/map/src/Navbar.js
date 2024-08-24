@@ -10,26 +10,26 @@ const NavBar = () => {
       <div class="container">
         <ul>
           <li>
-            <a href="#">
+          <a href="/home">
               <HomeIcon style={{ fontSize: "30px", verticalAlign: "middle" }} />
             </a>
           </li>
           <li>
-            <a href="#">
+          <a href="/find">
               <TravelExploreIcon
                 style={{ fontSize: "30px", verticalAlign: "middle" }}
               />
             </a>
           </li>
           <li>
-            <a href="#">
+          <a href="/create">
               <AddLocationAltIcon
                 style={{ fontSize: "30px", verticalAlign: "middle" }}
               />
             </a>
           </li>
           <li>
-            <a href="#">
+          <a href="/profile">
               <AccountCircle
                 style={{ fontSize: "30px", verticalAlign: "middle" }}
               />

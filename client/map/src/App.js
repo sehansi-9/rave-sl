@@ -3,10 +3,12 @@ import "leaflet/dist/leaflet.css";
 import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import AddEvent from "./screens/AddEvent";
+import FindEvent from "./screens/FindEvent";
 import NavBar from "./Navbar";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 
 const MapComponent = ({ setMap }) => {
-  const [data, setData] = useState([]);
+  
 
   const mapRef = useRef(null); // this is to make sure even if mounting and unmouthing happenes in useEffect that map is initialized only once
   useEffect(() => {
@@ -30,51 +32,36 @@ const MapComponent = ({ setMap }) => {
     setMap(mapRef.current);
   }, []); // Empty dependency array to ensure this runs only once
 
-  useEffect(() => {
-    fetch("/allevents", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        setData(result.events);
-        result.events.forEach((event) => {
-          const { lat, lng, title, body, dateTime } = event;
-
-          const eventDate = new Date(dateTime);
-          const date = eventDate.toLocaleDateString(); // Format as needed
-          const time = eventDate.toLocaleTimeString();
-
-          L.marker([lat, lng]).addTo(mapRef.current).bindPopup(`
-              <div style="text-align:center;">
-                <h3 style="color:#007bff;">${title}</h3>
-                <p>${body}</p>
-                <p>Date: ${date}</p>
-            <p>Time: ${time}</p>
-              </div>
-            `);
-        });
-      })
-      .catch((err) => {
-        console.error("Error fetching events:", err);
-      });
-  }, [setMap]);
+  
 
   return <div id="map"></div>;
 };
 
+
 function App() {
   const [map, setMap] = useState(null); // in the main parent App we initialize useState, currently map is null
   return (
-    <div>
-      <NavBar></NavBar>
-      <MapComponent setMap={setMap} />{" "}
-      {/* When Mapcomponent is rendered setter method is sent as a prop to it to update map */}
-      {map && <AddEvent map={map} />}{" "}
-      {/*And if that map is loaded properly AND AddEvent component is rendered then that map is passed to AddEvent to add events */}
-    </div>
+    <BrowserRouter>
+    <NavBar />
+    <Routes>
+      <Route
+        path="/find"
+        element={<>
+          <MapComponent setMap={setMap} />
+          {map && <FindEvent map={map} />}
+        </>}
+      />
+      <Route
+        path="/create"
+        element={
+          <>
+            <MapComponent setMap={setMap} />
+            {map && <AddEvent map={map} />}
+          </>
+        }
+      />
+    </Routes>
+  </BrowserRouter>
   );
 }
 
