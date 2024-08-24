@@ -1,0 +1,79 @@
+#map {
+  height: 60vh;
+  width: 100%;
+  background: #000
+}
+.option-container {
+  width: auto;
+  height: auto;
+  padding: 20px;
+  margin: 20px;
+  margin-top: 20px;
+  border-radius: 20px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(102, 151, 197, 0)
+  );
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(31, 22, 22, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.container {
+  position: fixed;
+  z-index: 2000;
+  top: 20px;
+  padding: 10px;
+  width: 100vw;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(102, 151, 197, 0)
+  );
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(31, 22, 22, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  height: 50px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-radius: 50px;
+}
+.container li {
+  list-style: none;
+  display: inline;
+}
+.container li a {
+  text-decoration: none;
+  padding: 7px 13px;
+  font-size: 13px;
+  border-radius: 30px;
+  display: inline-block;
+  text-align: center;
+  letter-spacing: 1px;
+  transition: all 0.3s ease-in;
+  color: rgb(79, 62, 117);
+}
+.container li a:hover {
+  background-color: #c8d3c7;
+}
+
+/* Ensure the zoom controls are fixed to the map and positioned in the bottom-right corner */
+.leaflet-control-zoom {
+  position: absolute; /* Position it absolutely within the map container */
+  bottom: 100px; /* Distance from the bottom of the map */
+  right: 70px; /* Distance from the right edge of the map */
+  z-index: 9000 !important; /* Ensure it appears above other elements */
+  background-color: white; /* Optional: background color to make controls visible */
+  border-radius: 5px; /* Optional: rounded corners for the zoom control */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Optional: shadow for better visibility */
+}
+.leaflet-layer {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
