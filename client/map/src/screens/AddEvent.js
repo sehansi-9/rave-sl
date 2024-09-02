@@ -129,6 +129,7 @@ const AddEvent = ({ map }) => {
           setLng("");
           setDate("");
           setTime("");
+          markerRef = null;
         }
       })
       .catch((error) => {
