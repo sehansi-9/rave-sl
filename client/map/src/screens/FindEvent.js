@@ -8,6 +8,7 @@ const FindEvent = ({ map, setMap }) => {
   const [query, setQuery] = useState("");
   const [cityEvents, setCityEvents] = useState([]);
   const [date, setDate] = useState("");
+ 
 
   useEffect(() => {
     fetch("/allevents", { //to display all events in map
@@ -120,21 +121,25 @@ const FindEvent = ({ map, setMap }) => {
 
   return (
     <div>
+      <div className="option-container">
       <input
+        className = "input-fields" 
         type="text"
         value={query}
-        placeholder="Search for a place or pick from map"
+        placeholder="Search for a place or zoom the map"
         onChange={handleSearchChange}
       />
       {searchResults.length > 0 && (
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <ul style={{ listStyle: "none",marginTop:"-6px" }}>
           {searchResults.map((result, index) => (
             <li
+            className="search-results"
               key={index}
               onClick={() => {
                 const { lat, lon } = result;
                 const position = [lat, lon];
                 map.setView(position, 10);
+                setQuery(result.display_name);
                 setSearchResults([]);
               }}
               style={{ cursor: "pointer", padding: "5px", borderBottom: "1px solid #ccc" }}
@@ -144,14 +149,21 @@ const FindEvent = ({ map, setMap }) => {
           ))}
         </ul>
       )}
+      <div style={{ display:"flex", flexDirection:"row" }}>
       <input
+        className = "input-fields" 
         type="date"
         value={date}
         onChange={(e) => setDate(e.target.value)}
       />
-      <button onClick={cityDateFilter}>
+      
+      </div>
+      <div className="bttn-div">
+      <button onClick={cityDateFilter} className="post-bttn">
         Filter
       </button>
+      </div>
+      </div>
     </div>
   );
 };
