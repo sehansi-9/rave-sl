@@ -10,10 +10,10 @@ const AddEvent = ({ map }) => {
   const [lng, setLng] = useState("");
   const [date, setDate] = useState(""); 
   const [time, setTime] = useState(""); 
-  const markerRef = useRef(null); // initiating the map marker as null, (no marker)
-  const [searchResults, setSearchResults] = useState([]); //to store the search results sent by the api 
+  const markerRef = useRef(null); 
+  const [searchResults, setSearchResults] = useState([]); 
   const [query, setQuery] = useState(""); // to update the search bar when a location is selected
-  const [showCurrentLocation, setShowCurrentLocation] = useState(false); // to show or not to show the pick current location option
+  const [showCurrentLocation, setShowCurrentLocation] = useState(false); 
 
   useEffect(() => {
     if (!map) return; // if map is not loaded return from function
@@ -67,11 +67,11 @@ const AddEvent = ({ map }) => {
     if (navigator.geolocation) { //accessing the geolocation of the global object, navigator
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const { latitude, longitude } = position.coords; // destructing and getting the latitude and longitude values
+          const { latitude, longitude } = position.coords; 
           if (markerRef.current) {
             map.removeLayer(markerRef.current); 
           }
-          map.setView([latitude, longitude], 13); // zooms in to the picked current location 
+          map.setView([latitude, longitude], 13); 
 
           markerRef.current = L.marker([latitude, longitude]) // updating the markerRef with a new marker 
             .addTo(map) 
@@ -96,11 +96,15 @@ const AddEvent = ({ map }) => {
    const handleSearchChange = async (e) => { 
     const value = e.target.value; //targets the value typed by the user
     setQuery(value) 
-    if (value.length <= 3) { // if user has only entered 3 or less characters of the place (too short)
-      setShowCurrentLocation(true) //current location picking option is made visible
-      setSearchResults([]); //search result array is emptied 
-    } else { 
-      setShowCurrentLocation(false) // getting rid of current location picking option 
+    if (value.length==0){ 
+      setShowCurrentLocation(false) 
+    }
+    else if (value.length <= 3) { // if user has only entered 3 or less characters of the place (too short)
+      setShowCurrentLocation(true) 
+      setSearchResults([]); 
+    }
+     else { 
+      setShowCurrentLocation(false) 
       await searchPlace(value); //starts searching after 3 characters
     }
   };
@@ -164,29 +168,37 @@ const AddEvent = ({ map }) => {
   return (
     <div>
       <div className="option-container">
-        <input 
+        <input
+          className = "input-fields" 
           type="text"
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <textarea
+        <input
+        className = "input-fields" 
           placeholder="Description"
           value={body}
           onChange={(e) => setBody(e.target.value)}
         />
+        <div className="date-time">
         <input
+        className = "input-fields" 
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
         <input
+        className = "input-fields" 
+        id ="time-field"
           type="time"
           value={time}
           onChange={(e) => setTime(e.target.value)} 
         />
+        </div>
         
       <input 
+        className = "input-fields" 
         type="text"
         value={query}
         placeholder="Search for a place or pick from map" 
@@ -194,19 +206,20 @@ const AddEvent = ({ map }) => {
         onChange={handleSearchChange} // and with every letter user types we call the handleSearchChange function 
       />
       {showCurrentLocation && ( // so if handleSearchChange made showCurrentLocation state true 
-        <ul style={{ listStyle: "none", padding: 0 }}> 
+        <ul style={{ listStyle: "none" ,marginTop:"-6px" }}> 
           <li
+            className="search-results"
             onClick={getCurrentLocation}// a clickable list item that will call the getCurrentLocation function
-            style={{ cursor: "pointer", padding: "5px", borderBottom: "1px solid #ccc" }}
           >
             Pick Current Location
           </li>
         </ul>
       )}
       {searchResults.length > 0 && ( // else if there's an element in searchResult array 
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <ul style={{ listStyle: "none",marginTop:"-6px"  }}>
           {searchResults.map((result, index) => ( // listing search results
-            <li
+            <li 
+              className="search-results"
               key={index}
               onClick={() => { // with clickable list items
                 const { lat, lon } = result; // gets the lat and lon of each result of the array
@@ -216,7 +229,7 @@ const AddEvent = ({ map }) => {
                 map.setView([lat, lon], 13); // set view to the new position
                 setLat(lat)
                 setLng(lon)
-      
+                setShowCurrentLocation(false)
                 markerRef.current = L.marker([lat, lon]) // locates a new marker on that position
                   .addTo(map)
                   .bindPopup("Location Selected")
@@ -224,15 +237,19 @@ const AddEvent = ({ map }) => {
                 setQuery(result.display_name); // update search bar with selected place/adresss
                 setSearchResults([]); // clear search results
               }}
-              style={{ cursor: "pointer", padding: "5px", borderBottom: "1px solid #ccc" }}
+              
             >
               {result.display_name}
             </li>
           ))}
         </ul>
       )}
-        <button onClick={postDetails}>Post Event</button>
+      <div className="bttn-div">
+      <button className="post-bttn" onClick={postDetails}>Post Event</button>
       </div>
+          
+      </div>
+      
     </div>
   );
 };
