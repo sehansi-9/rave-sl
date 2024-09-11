@@ -2,6 +2,12 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 
+const customIcon = L.icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/5149/5149694.png",  
+  iconSize: [38, 38],        
+       
+});
+
 const FindEvent = ({ map, setMap }) => {
   const [data, setData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
@@ -27,7 +33,7 @@ const FindEvent = ({ map, setMap }) => {
           const date = eventDate.toLocaleDateString(); 
           const time = eventDate.toLocaleTimeString();
 
-          L.marker([lat, lng])
+          L.marker([lat, lng], { icon: customIcon })
             .addTo(map)
             .bindPopup(`
               <div style="text-align:center;">
@@ -149,7 +155,7 @@ const FindEvent = ({ map, setMap }) => {
           ))}
         </ul>
       )}
-      <div style={{ display:"flex", flexDirection:"row" }}>
+      
       <input
         className = "input-fields" 
         type="date"
@@ -164,7 +170,7 @@ const FindEvent = ({ map, setMap }) => {
       </button>
       </div>
       </div>
-    </div>
+   
   );
 };
 

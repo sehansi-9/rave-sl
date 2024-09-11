@@ -4,6 +4,12 @@ import React, { useState, useEffect, useRef } from "react";
 import M from "materialize-css";
 
 const AddEvent = ({ map }) => {
+
+  const customIcon = L.icon({
+    iconUrl: "https://cdn-icons-png.flaticon.com/512/5149/5149694.png",  
+    iconSize: [38, 38],        
+         
+  });
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [lat, setLat] = useState("");
@@ -26,7 +32,7 @@ const AddEvent = ({ map }) => {
       setLat(e.latlng.lat) //setting the lat and lon values
       setLng(e.latlng.lng)
 
-      markerRef.current = L.marker([e.latlng.lat, e.latlng.lng]) // a new marker is added to the map 
+      markerRef.current = L.marker([e.latlng.lat, e.latlng.lng], { icon: customIcon }) // a new marker is added to the map 
         .addTo(map)
         .bindPopup("Location Selected") // with the popup location selected
         .openPopup()
@@ -73,7 +79,7 @@ const AddEvent = ({ map }) => {
           }
           map.setView([latitude, longitude], 13); 
 
-          markerRef.current = L.marker([latitude, longitude]) // updating the markerRef with a new marker 
+          markerRef.current = L.marker([latitude, longitude], { icon: customIcon }) // updating the markerRef with a new marker 
             .addTo(map) 
             .bindPopup("Current Location Selected") 
             .openPopup();
@@ -145,7 +151,7 @@ const AddEvent = ({ map }) => {
             <p>Time: ${time}</p>
           </div>
         `; 
-          L.marker([lat, lng]).addTo(map).bindPopup(popupContent).openPopup();  //using values still stored in state instead of fetching from database again
+          L.marker([lat, lng], { icon: customIcon }).addTo(map).bindPopup(popupContent).openPopup();  //using values still stored in state instead of fetching from database again
 
           setTitle("")
           setBody("")
@@ -230,7 +236,7 @@ const AddEvent = ({ map }) => {
                 setLat(lat)
                 setLng(lon)
                 setShowCurrentLocation(false)
-                markerRef.current = L.marker([lat, lon]) // locates a new marker on that position
+                markerRef.current = L.marker([lat, lon], { icon: customIcon }) // locates a new marker on that position
                   .addTo(map)
                   .bindPopup("Location Selected")
                   .openPopup();
