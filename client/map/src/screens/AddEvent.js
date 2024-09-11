@@ -143,12 +143,33 @@ const AddEvent = ({ map }) => {
         } else {
           M.toast({ html: "Posted!", classes: "green darken-2" }); 
 
+          const eventDate = new Date(dateTime);
+          const date = eventDate.toLocaleDateString(undefined, {
+            month: "short",
+            day: "numeric",
+          });
+          const time = eventDate.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
+
           const popupContent = `
-          <div style="text-align:center;">
-            <h3 style="color:#007bff;">${title}</h3>
-            <p>${body}</p>
-            <p>Date: ${date}</p>
-            <p>Time: ${time}</p>
+          <div class="event-card">
+            <div class="event-image">
+              <img src="https://t3.ftcdn.net/jpg/02/87/35/70/360_F_287357045_Ib0oYOxhotdjOEHi0vkggpZTQCsz0r19.jpg" alt="Scuba Diving Event"></img>
+              <div class="event-date">
+                <span class="event-day">${date}</span>
+              </div>
+            </div>
+            <div class="event-details">
+              <h3 class="event-title">${title}</h3>
+              <p class="event-time">${date} | ${time}</p>
+              <p class="event-description">by organizer</p>
+              <div class="event-location">
+                <i class="fas fa-map-marker-alt"> 89, street lane, west, colombo</i>
+              </div>
+            </div>
           </div>
         `; 
           L.marker([lat, lng], { icon: customIcon }).addTo(map).bindPopup(popupContent).openPopup();  //using values still stored in state instead of fetching from database again

@@ -7,10 +7,10 @@ import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 const NavBar = () => {
   return (
     <>
-      <div class="container">
+      <div className="container">
         <ul>
           <li>
-          <a href="/home">
+          <a href="/#">
               <HomeIcon style={{ fontSize: "30px", verticalAlign: "middle" }} />
             </a>
           </li>
@@ -29,7 +29,7 @@ const NavBar = () => {
             </a>
           </li>
           <li>
-          <a href="/profile">
+          <a href="/#">
               <AccountCircle
                 style={{ fontSize: "30px", verticalAlign: "middle" }}
               />

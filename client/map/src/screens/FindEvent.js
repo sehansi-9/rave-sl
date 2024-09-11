@@ -3,9 +3,8 @@ import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 
 const customIcon = L.icon({
-  iconUrl: "https://cdn-icons-png.flaticon.com/512/5149/5149694.png",  
-  iconSize: [38, 38],        
-       
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/5149/5149694.png",
+  iconSize: [38, 38],
 });
 
 const FindEvent = ({ map, setMap }) => {
@@ -14,33 +13,47 @@ const FindEvent = ({ map, setMap }) => {
   const [query, setQuery] = useState("");
   const [cityEvents, setCityEvents] = useState([]);
   const [date, setDate] = useState("");
- 
 
   useEffect(() => {
-    fetch("/allevents", { //to display all events in map
+    fetch("/allevents", {
       headers: {
         "Content-Type": "application/json",
       },
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
         setData(result.events);
         result.events.forEach((event) => {
           const { lat, lng, title, body, dateTime } = event;
 
-          const eventDate = new Date(dateTime); // converting ISO 8601 date-time string back in to date and time constants as two
-          const date = eventDate.toLocaleDateString(); 
-          const time = eventDate.toLocaleTimeString();
+          const eventDate = new Date(dateTime);
+          const date = eventDate.toLocaleDateString(undefined, {
+            month: "short",
+            day: "numeric",
+          });
+          const time = eventDate.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
 
           L.marker([lat, lng], { icon: customIcon })
             .addTo(map)
             .bindPopup(`
-              <div style="text-align:center;">
-                <h3 style="color:#007bff;">${title}</h3>
-                <p>${body}</p>
-                <p>Date: ${date}</p>
-                <p>Time: ${time}</p>
+              <div class="event-card">
+                <div class="event-image">
+                  <img src="https://t3.ftcdn.net/jpg/02/87/35/70/360_F_287357045_Ib0oYOxhotdjOEHi0vkggpZTQCsz0r19.jpg" alt="Scuba Diving Event"></img>
+                  <div class="event-date">
+                    <span class="event-day">${date}</span>
+                  </div>
+                </div>
+                <div class="event-details">
+                  <h3 class="event-title">${title}</h3>
+                  <p class="event-time">${date} | ${time}</p>
+                  <p class="event-description">by organizer</p>
+                  <div class="event-location">
+                    <i class="fas fa-map-marker-alt"> 89, street lane, west, colombo</i>
+                  </div>
+                </div>
               </div>
             `);
         });
@@ -64,9 +77,8 @@ const FindEvent = ({ map, setMap }) => {
         const { lat, lon } = searchData[0];
         const position = [lat, lon];
         map.setView(position, 10);
-        const cityBounds = map.getBounds();
 
-        // Filter events within the city bounds
+        const cityBounds = map.getBounds();
         const eventsInCity = data.filter((event) => {
           const eventLatLng = L.latLng(event.lat, event.lng);
           return cityBounds.contains(eventLatLng);
@@ -74,12 +86,10 @@ const FindEvent = ({ map, setMap }) => {
 
         setCityEvents(eventsInCity);
       } else {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            map.setView([latitude, longitude], 13);
-          }
-        );
+        navigator.geolocation.getCurrentPosition((position) => {
+          const { latitude, longitude } = position.coords;
+          map.setView([latitude, longitude], 13);
+        });
       }
     } catch (error) {
       console.error("Error searching for place:", error);
@@ -87,7 +97,6 @@ const FindEvent = ({ map, setMap }) => {
   };
 
   const cityDateFilter = () => {
-    
     const startOfDay = new Date(date);
     startOfDay.setHours(0, 0, 0, 0);
 
@@ -101,8 +110,7 @@ const FindEvent = ({ map, setMap }) => {
       });
 
       console.log("Filtered events by date:", dateFiltered);
-    return dateFiltered;
-  
+      return dateFiltered;
     }
 
     const cityDateFiltered = cityEvents.filter((event) => {
@@ -118,59 +126,61 @@ const FindEvent = ({ map, setMap }) => {
     const value = e.target.value;
     setQuery(value);
 
-    if (value.length > 2) { // start searching after 3 characters
+    if (value.length > 2) {
       await searchPlace(value);
     } else {
-      setSearchResults([]); // Clear results if input is too short
+      setSearchResults([]);
     }
   };
 
   return (
     <div>
       <div className="option-container">
-      <input
-        className = "input-fields" 
-        type="text"
-        value={query}
-        placeholder="Search for a place or zoom the map"
-        onChange={handleSearchChange}
-      />
-      {searchResults.length > 0 && (
-        <ul style={{ listStyle: "none",marginTop:"-6px" }}>
-          {searchResults.map((result, index) => (
-            <li
-            className="search-results"
-              key={index}
-              onClick={() => {
-                const { lat, lon } = result;
-                const position = [lat, lon];
-                map.setView(position, 10);
-                setQuery(result.display_name);
-                setSearchResults([]);
-              }}
-              style={{ cursor: "pointer", padding: "5px", borderBottom: "1px solid #ccc" }}
-            >
-              {result.display_name}
-            </li>
-          ))}
-        </ul>
-      )}
-      
-      <input
-        className = "input-fields" 
-        type="date"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-      />
-      
+        <input
+          className="input-fields"
+          type="text"
+          value={query}
+          placeholder="Search for a place or zoom the map"
+          onChange={handleSearchChange}
+        />
+        {searchResults.length > 0 && (
+          <ul style={{ listStyle: "none", marginTop: "-6px" }}>
+            {searchResults.map((result, index) => (
+              <li
+                className="search-results"
+                key={index}
+                onClick={() => {
+                  const { lat, lon } = result;
+                  const position = [lat, lon];
+                  map.setView(position, 10);
+                  setQuery(result.display_name);
+                  setSearchResults([]);
+                }}
+                style={{
+                  cursor: "pointer",
+                  padding: "5px",
+                  borderBottom: "1px solid #ccc",
+                }}
+              >
+                {result.display_name}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <input
+          className="input-fields"
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+        />
       </div>
       <div className="bttn-div">
-      <button onClick={cityDateFilter} className="post-bttn">
-        Filter
-      </button>
+        <button onClick={cityDateFilter} className="post-bttn">
+          Filter
+        </button>
       </div>
-      </div>
-   
+    </div>
   );
 };
 
