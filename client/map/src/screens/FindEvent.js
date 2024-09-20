@@ -24,7 +24,7 @@ const FindEvent = ({ map, setMap }) => {
       .then((result) => {
         setData(result.events);
         result.events.forEach((event) => {
-          const { lat, lng, title, body, dateTime } = event;
+          const { lat, lng, title, body,address, dateTime } = event;
 
           const eventDate = new Date(dateTime);
           const date = eventDate.toLocaleDateString(undefined, {
@@ -51,7 +51,7 @@ const FindEvent = ({ map, setMap }) => {
                   <p class="event-time">${date} | ${time}</p>
                   <p class="event-description">by organizer</p>
                   <div class="event-location">
-                    <i class="fas fa-map-marker-alt"> 89, street lane, west, colombo</i>
+                    <i class="fas fa-map-marker-alt"> ${address}</i>
                   </div>
                 </div>
               </div>
@@ -153,7 +153,10 @@ const FindEvent = ({ map, setMap }) => {
                   const { lat, lon } = result;
                   const position = [lat, lon];
                   map.setView(position, 10);
-                  setQuery(result.display_name);
+                  const addressParts = result.display_name.split(",").slice(0, -2);
+          const address = addressParts.join(", ").trim();
+          setQuery(address);
+                  
                   setSearchResults([]);
                 }}
                 style={{

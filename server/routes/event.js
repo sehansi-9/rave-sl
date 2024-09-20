@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Event = mongoose.model("Event");
 
 router.post("/createevent", (req, res) => {
-    const { title, body, lat, lng, dateTime } = req.body;
+    const { title, body, address, lat, lng, dateTime } = req.body;
   
     // Validate the input
     if (!title || !body || !lat || !lng || !dateTime) {
@@ -15,6 +15,7 @@ router.post("/createevent", (req, res) => {
     const event = new Event({
       title,
       body,
+      address,
       lat,
       lng,
       dateTime: new Date(dateTime), // Convert dateTime to a Date object
