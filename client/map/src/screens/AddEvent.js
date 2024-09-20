@@ -16,6 +16,7 @@ const AddEvent = ({ map }) => {
   const [lng, setLng] = useState("");
   const [date, setDate] = useState(""); 
   const [time, setTime] = useState(""); 
+  const [address, setAddress] = useState("")
   const markerRef = useRef(null); 
   const [searchResults, setSearchResults] = useState([]); 
   const [query, setQuery] = useState(""); // to update the search bar when a location is selected
@@ -44,7 +45,10 @@ const AddEvent = ({ map }) => {
         const response = await fetch(reverseGeocodeUrl);
         const data = await response.json() // 
         if (data && data.display_name) { // checking if display name property of data and data is available
-          setQuery(data.display_name); 
+          const addressParts = data.display_name.split(",").slice(0, -2);
+          const address = addressParts.join(", ").trim();
+          setQuery(address);
+          setAddress(address) 
         } else {
           setQuery("Address not found"); 
         }
@@ -69,36 +73,55 @@ const AddEvent = ({ map }) => {
     }
   };
 
-  const getCurrentLocation = () => { 
-    if (navigator.geolocation) { //accessing the geolocation of the global object, navigator
+  const getCurrentLocation = async () => {
+    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords; 
+        async (position) => {
+          const { latitude, longitude } = position.coords;
           if (markerRef.current) {
-            map.removeLayer(markerRef.current); 
+            map.removeLayer(markerRef.current);
           }
-          map.setView([latitude, longitude], 13); 
-
-          markerRef.current = L.marker([latitude, longitude], { icon: customIcon }) // updating the markerRef with a new marker 
-            .addTo(map) 
-            .bindPopup("Current Location Selected") 
+          map.setView([latitude, longitude], 13);
+  
+          markerRef.current = L.marker([latitude, longitude], { icon: customIcon })
+            .addTo(map)
+            .bindPopup("Current Location Selected")
             .openPopup();
-
-          setLat(latitude); // setting the lat and long values
-          setLng(longitude)
-          setQuery("Current Location"); // Update search bar with "Current Location" as the address
-          setShowCurrentLocation(false) // current location picking option disappears after selecting the option
+  
+          setLat(latitude); // set latitude
+          setLng(longitude); // set longitude
+  
+          // reverse geocoding using latitude and longitude
+          const reverseGeocodeUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`;
+  
+          try {
+            const response = await fetch(reverseGeocodeUrl);
+            const data = await response.json();
+            setQuery("Current Location selected")
+            if (data && data.display_name) {
+              const addressParts = data.display_name.split(",").slice(0, -2);
+          const address = addressParts.join(", ").trim();
+          setAddress(address) 
+            } else {
+              setQuery("Address not found");
+            }
+          } catch (error) {
+            console.error("Error with reverse geocoding:", error);
+            setQuery("Error retrieving address");
+          }
+  
+          setShowCurrentLocation(false); // current location picking option disappears
         },
         (error) => {
-          console.error("Error getting location:", error)
-          alert("Error getting current location.")
+          console.error("Error getting location:", error);
+          alert("Error getting current location.");
         }
       );
     } else {
       alert("Geolocation is not supported by this browser.");
     }
   };
-
+  
    const handleSearchChange = async (e) => { 
     const value = e.target.value; //targets the value typed by the user
     setQuery(value) 
@@ -131,6 +154,7 @@ const AddEvent = ({ map }) => {
       body: JSON.stringify({
         title,
         body,
+        address,
         lat,
         lng,
         dateTime,
@@ -167,7 +191,7 @@ const AddEvent = ({ map }) => {
               <p class="event-time">${date} | ${time}</p>
               <p class="event-description">by organizer</p>
               <div class="event-location">
-                <i class="fas fa-map-marker-alt"> 89, street lane, west, colombo</i>
+                <i class="fas fa-map-marker-alt"> ${address}</i>
               </div>
             </div>
           </div>
@@ -182,6 +206,7 @@ const AddEvent = ({ map }) => {
           setTime("")
           setQuery("")
           setSearchResults("")
+          setAddress("")
           showCurrentLocation(false) //after that all states are set back to null
           markerRef.current = null
         }
@@ -253,6 +278,10 @@ const AddEvent = ({ map }) => {
                 if (markerRef.current) {
                   map.removeLayer(markerRef.current); //remove previous marker value
                 }
+                const addressParts = result.display_name.split(",").slice(0, -2);
+          const address = addressParts.join(", ").trim();
+          
+          setAddress(address) 
                 map.setView([lat, lon], 13); // set view to the new position
                 setLat(lat)
                 setLng(lon)
@@ -261,7 +290,7 @@ const AddEvent = ({ map }) => {
                   .addTo(map)
                   .bindPopup("Location Selected")
                   .openPopup();
-                setQuery(result.display_name); // update search bar with selected place/adresss
+                  setQuery(address);
                 setSearchResults([]); // clear search results
               }}
               
