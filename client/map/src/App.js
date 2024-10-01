@@ -6,16 +6,18 @@ import AddEvent from "./screens/AddEvent";
 import FindEvent from "./screens/FindEvent";
 import NavBar from "./Navbar";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
 
 const MapComponent = ({ setMap }) => {
 
   const customIcon = L.icon({
-    iconUrl: "https://png.pngtree.com/png-vector/20230617/ourmid/pngtree-you-are-here-location-pin-in-red-gradation-color-vector-png-image_7153745.png",  
-    iconSize: [70, 70],        
-         
+    iconUrl: "https://png.pngtree.com/png-vector/20230617/ourmid/pngtree-you-are-here-location-pin-in-red-gradation-color-vector-png-image_7153745.png",
+    iconSize: [70, 70],
+
   });
-  
-  const mapRef = useRef(null); // this is to make sure even if mounting and unmouthing happenes in useEffect that map is initialized only once
+
+  const mapRef = useRef(null); // this is to make sure even if mounting and unmounting happens in useEffect that map is initialized only once
   useEffect(() => {
     if (mapRef.current) return; // if map is initialized or mapRef.current== yes and it holds something not null THEN exit
     //ELSE
@@ -30,12 +32,14 @@ const MapComponent = ({ setMap }) => {
     mapRef.current.on("locationfound", (e) => {
       L.marker(e.latlng, { icon: customIcon })
         .addTo(mapRef.current)
+        .bindPopup("You are here!")
+        .openPopup();
     });
 
     setMap(mapRef.current);
   }, []); // Empty dependency array to ensure this runs only once
 
-  
+
 
   return <div id="map"></div>;
 };
@@ -62,6 +66,14 @@ function App() {
             {map && <AddEvent map={map} />}
           </>
         }
+      />
+      <Route
+        path="/login"
+        element={<LoginPage/>}
+      />
+      <Route
+          path="/signup"
+          element={<SignUpPage/>}
       />
     </Routes>
   </BrowserRouter>
