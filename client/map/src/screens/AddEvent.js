@@ -149,7 +149,7 @@ const AddEvent = ({ map }) => {
         }
         // else
         const dateTime = `${date}T${time}`; // making a new field dateTime for the database (ISO 8601 date-time string.)
-
+//gdfhskdf
 
         fetch("/createevent", { // fetching the backend api endpoint
             method: "POST",
