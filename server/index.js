@@ -3,13 +3,14 @@ const app = express();
 const PORT = 5000;
 const mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config();
 
 // Middleware
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json()); // Middleware to parse JSON requests
 
 // MongoDB Connection
-mongoose.connect("mongodb+srv://sehansiperera567:techspirit@cluster0.yplf9.mongodb.net/data");
+mongoose.connect(process.env.MONGO_URI);
 
 mongoose.connection.on('connected', () => {
     console.log('connected to mongo yeahhh');

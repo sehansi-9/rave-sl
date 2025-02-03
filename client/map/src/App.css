@@ -1,7 +1,7 @@
 #map {
   height: 60vh;
   width: 100%;
-  background: #000
+  background: #000;
 }
 .option-container {
   width: auto;
@@ -12,60 +12,64 @@
   border-radius: 20px;
   overflow-y: hidden;
   overflow-x: hidden;
-  
 }
 .input-fields {
-  background: rgba(255, 255, 255, 0.1) !important; 
+  background: rgba(255, 255, 255, 0.1) !important;
   backdrop-filter: blur(5px) !important;
   -webkit-backdrop-filter: blur(5px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important; 
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important; 
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
   padding: 12px !important;
-  border-radius: 50px !important; 
+  border-radius: 50px !important;
   font-size: 16px !important;
   color: #1f1b1b !important;
   margin-bottom: 10px !important;
   height: 30px !important;
   width: 98% !important;
-  transition: border 0.3s ease !important; 
+  transition: border 0.3s ease !important;
 }
 
 .input-fields:focus {
   outline: none !important;
-  border: 1px solid rgba(102, 151, 197, 0.6) !important; 
+  border: 1px solid rgba(136, 113, 199, 0.6) !important;
 }
 
 .input-fields::placeholder {
-  color: rgba(0, 0, 0, 0.9)!important; 
+  color: rgba(0, 0, 0, 0.9) !important;
 }
 
-.date-time{
+.date-time {
   display: flex;
- gap: 20px
+  gap: 20px;
 }
-.bttn-div{
+.bttn-div {
   display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
 }
 
-.post-bttn{
-width: 100px;
-height: 40px;
-background: linear-gradient(99.99deg, #F1005B -21.45%, #C64C85 100%, #F1005B 100%);
-border-radius: 10px;
+.post-bttn {
+  width: 100px;
+  height: 40px;
+  background: linear-gradient(
+    99.99deg,
+    #f1005b -21.45%,
+    #c64c85 100%,
+    #f1005b 100%
+  );
+  border-radius: 10px;
 }
 
-.search-results{
+.search-results {
   cursor: pointer;
-   padding: 5px;
+  padding: 5px;
   border-bottom: 1px solid #ccc;
   border-left: 1px solid #ccc;
   border-right: 1px solid #ccc;
-  background: rgba(255, 255, 255, 0.1) !important; 
+  background: rgba(255, 255, 255, 0.1) !important;
   backdrop-filter: blur(5px) !important;
   -webkit-backdrop-filter: blur(5px) !important;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important; 
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
   display: block;
   border-radius: 7px;
 }
@@ -128,6 +132,15 @@ border-radius: 10px;
 .event-card {
   display: flex;
   max-width: 600px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  overflow: hidden;
+}
+.filter-card {
+  display: flex;
+  width: 80%;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -197,4 +210,27 @@ border-radius: 10px;
 .event-location i {
   margin-right: 5px;
   color: #e53935;
+}
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Optional: Adjust spacing between input and button */
+}
+
+.input-fields {
+  flex: 1; /* Makes the input field take available space */
+  padding: 8px;
+  font-size: 14px;
+}
+
+.clear-bttn {
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 100px;
+  background: linear-gradient(
+    #7e616c -21.45%,
+    #8667af 100%,
+    #9475b8 100%
+  );
 }
